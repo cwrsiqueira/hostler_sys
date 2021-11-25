@@ -23,4 +23,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/clients', [App\Http\Controllers\ClientController::class, 'index'])->name('clients');
     Route::get('/projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('projects');
+    Route::post('/projects', [App\Http\Controllers\ProjectController::class, 'create'])->name('projects.create');
 });

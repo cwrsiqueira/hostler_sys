@@ -52,38 +52,25 @@
     </x-adminlte-datatable>
 
     {{-- Custom --}}
-    <x-adminlte-modal id="modalCustom" title="New Client" size="lg" theme="primary" icon="fas fa-plus" v-centered static-backdrop scrollable>
-        <div>
-            <div class="row">
-                <x-adminlte-input name="name" label="Name" placeholder="Enter Name" fgroup-class="col-md-6" disable-feedback/>
-                <x-adminlte-input name="company" label="Company" placeholder="Enter Company" fgroup-class="col-md-6" disable-feedback/>
-            </div>
-            <div class="row">
-                <x-adminlte-input name="phone" label="Phone" placeholder="Enter Phone" fgroup-class="col-md-6" disable-feedback/>
-                <x-adminlte-input name="email" label="Email" placeholder="Enter Email" fgroup-class="col-md-6" disable-feedback/>
-            </div>
-        </div>
-        <x-slot name="footerSlot">
-            <x-adminlte-button class="mr-auto" theme="success" label="Save"/>
-            <x-adminlte-button theme="danger" label="Dismiss" data-dismiss="modal"/>
-        </x-slot>
-    </x-adminlte-modal>
+        <form action="{{ route('projects.create') }}" method="post">
+            @csrf
+            <x-adminlte-modal id="modalCustom" title="New Client" size="lg" theme="primary" icon="fas fa-plus" v-centered static-backdrop scrollable>
+                    <div>
+                        <div class="row">
+                            <x-adminlte-input type="text" name="name" label="Name" placeholder="Enter Name" fgroup-class="col-md-6" disable-feedback/>
+                            <x-adminlte-input type="text" name="company" label="Company" placeholder="Enter Company" fgroup-class="col-md-6" disable-feedback/>
+                        </div>
+                        <div class="row">
+                            <x-adminlte-input type="text" name="phone" label="Phone" placeholder="Enter Phone" fgroup-class="col-md-6" disable-feedback error-key/>
+                            <x-adminlte-input type="email" name="email" label="Email" placeholder="Enter Email" fgroup-class="col-md-6" disable-feedback/>
+                        </div>
+                    </div>
+                    <x-slot name="footerSlot">
+                        <x-adminlte-button type="submit" label="Save" theme="success" class="mr-auto" icon="fas fa-lg fa-save"/>
+                        <x-adminlte-button theme="danger" label="Dismiss" data-dismiss="modal"/>
+                    </x-slot>
+            </x-adminlte-modal>
+        </form>
 
 
-@stop
-
-@section('css')
-    <link rel="stylesheet" href="">
-    <style>
-        .header {
-            display: flex;
-            justify-content: space-between;
-        }
-    </style>
-@stop
-
-@section('js')
-    <script>
-
-    </script>
 @stop
