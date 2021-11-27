@@ -25,7 +25,8 @@
     $heads = [
         'ID',
         'Name',
-        ['label' => 'Phone', 'width' => 40],
+        'Email',
+        'Phone',
         ['label' => 'Actions', 'no-export' => true, 'width' => 5],
     ];
 
@@ -42,37 +43,32 @@
                     <i class="fa fa-lg fa-fw fa-eye"></i>
                 </button>';
 
-    $config = [
-        'data' => [
-            // [22, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
-            // [19, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
-            // [3, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
-        ],
-        'order' => [[1, 'asc']],
-        'columns' => [null, null, null, ['orderable' => false]],
-    ];
+    // $config = [
+    //     'data' => [
+    //         [22, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
+    //         [19, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
+    //         [3, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
+    //     ],
+    //     'order' => [[1, 'asc']],
+    //     'columns' => [null, null, null, ['orderable' => false]],
+    // ];
 
+    $config = [];
     foreach ($clients as $key => $client) {
         $config['data'][$key][] = $client->id;
         $config['data'][$key][] = $client->name;
+        $config['data'][$key][] = $client->email;
         $config['data'][$key][] = $client->phone;
         $config['data'][$key][] = '<nobr>'.btnEdit($client->id).$btnDelete.$btnDetails.'</nobr>';
     }
+    $config['order'] = [[1, 'asc']];
+    $config['columns'] = [null, null, null, null, ['orderable' => false]];
 
     // dd($config);
 
     @endphp
 
-    {{-- Minimal example / fill data using the component slot --}}
-    <x-adminlte-datatable id="table1" :heads="$heads">
-        @foreach($config['data'] as $row)
-            <tr>
-                @foreach($row as $cell)
-                    <td>{!! $cell !!}</td>
-                @endforeach
-            </tr>
-        @endforeach
-    </x-adminlte-datatable>
+    <x-adminlte-datatable id="table2" :heads="$heads" :config="$config" hoverable bordered compressed with-buttons/>
 
     {{-- Custom --}}
         <form action="{{ route('clients.store') }}" method="post">
@@ -97,6 +93,20 @@
 
 
 @stop
+
+@section('css')
+        <style>
+            .dataTables_filter {
+                text-align: right;
+            }
+            .dataTables_filter label {
+                text-align: left;
+            }
+            ul.pagination {
+                justify-content: right;
+            }
+        </style>
+@endsection
 
 @section('js')
         <script>

@@ -365,8 +365,18 @@ return [
     */
 
     'plugins' => [
+        'Mask' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'js/jquery.mask.min.js'
+                ]
+            ]
+        ],
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

@@ -10,7 +10,7 @@ use App\Models\Client;
 class ClientController extends Controller
 {
     public function index() {
-        $clients = Client::select('id', 'name', 'phone')->get();
+        $clients = Client::select('id', 'name', 'email', 'phone')->get();
         return view('clients', ['clients' => $clients]);
     }
 

@@ -107,10 +107,6 @@
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
 
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
-    <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js" ></script>
-    <script src="js/jquery.mask.min.js"></script>
-
 </body>
 
 </html>
