@@ -90,6 +90,7 @@
         @include('adminlte::plugins', ['type' => 'js'])
 
         <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+        <script src="js/app.js"></script>
     @else
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
     @endif
@@ -106,7 +107,6 @@
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
 
-    <script src="js/app.js"></script>
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
     <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js" ></script>
     <script src="js/jquery.mask.min.js"></script>
