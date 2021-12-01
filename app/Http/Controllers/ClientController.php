@@ -10,7 +10,7 @@ use App\Models\Client;
 class ClientController extends Controller
 {
     public function index() {
-        $clients = Client::select('id', 'name', 'email', 'phone')->get();
+        $clients = Client::select('id', 'name', 'email', 'phone', 'company')->get();
         return view('clients', ['clients' => $clients]);
     }
 
@@ -20,9 +20,9 @@ class ClientController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'company' => 'required|max:255',
+            'company' => 'max:255',
             'phone' => 'max:255',
-            'email' => 'required|max:255|unique:clients',
+            'email' => 'max:255|unique:clients',
         ]);
 
         Client::insert($data);
