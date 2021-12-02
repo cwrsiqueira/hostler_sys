@@ -12,5 +12,8 @@ $(function(){
         }
     };
 
-    $('#phone').mask(SPMaskBehavior, spOptions);
+    let phones = document.querySelectorAll('#phone');
+    phones.forEach(e => {
+        $(e).mask(SPMaskBehavior, spOptions);
+    });
 })

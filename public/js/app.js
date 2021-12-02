@@ -19,7 +19,10 @@ $(function () {
     }
   };
 
-  $('#phone').mask(SPMaskBehavior, spOptions);
+  var phones = document.querySelectorAll('#phone');
+  phones.forEach(function (e) {
+    $(e).mask(SPMaskBehavior, spOptions);
+  });
 });
 
 /***/ }),

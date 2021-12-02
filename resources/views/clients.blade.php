@@ -3,13 +3,15 @@
 @section('title', 'Hostler Sys | Clients')
 
 @section('content_header')
+
     <div class="header">
         <h1>Clients</h1>
         <x-adminlte-button label="New Client" theme="primary" icon="fas fa-plus" data-toggle="modal" data-target="#modalClient"/>
     </div>
+
     @if ($errors->any())
         <hr>
-        <x-adminlte-alert theme="danger" title="Error">
+        <x-adminlte-alert theme="danger" title="Error" dismissable>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -17,6 +19,35 @@
             </ul>
         </x-adminlte-alert>
     @endif
+
+    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+        @if(session($msg))
+            <hr>
+            <div class="alert alert-{{ $msg }}" role="alert">
+                @switch($msg)
+                    @case('danger')
+                        <i class="icon fas fa-ban"></i>
+                        Error!!!
+                        @break
+                    @case('warning')
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Atention!!!
+                        @break
+                    @case('success')
+                        <i class="fas fa-thumbs-up"></i>
+                        Success!!!
+                        @break
+                    @case('info')
+                        <i class="fas fa-info-circle"></i>
+                        Information!!!
+                        @break
+                    @default
+                @endswitch
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                {!! session($msg) !!}
+            </div>
+        @endif
+    @endforeach
 @stop
 
 @section('content')
@@ -32,52 +63,28 @@
     ];
 
     function btnEdit($id) {
-        return '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit" id="edit_client" data-toggle="modal" data-target="#modalClient" data-id="'.$id.'">
-                    <i class="fa fa-lg fa-fw fa-pen"></i>
+        return '<button class="btn btn-xs text-primary mx-1" title="Edit" id="edit_client" data-toggle="modal" data-target="#modalClient'.$id.'" data-id="'.$id.'">
+                    <i class="fa fa-lg fa-fw fa-cogs"></i>
                 </button>';
     }
 
-    function btnDelete($id) {
-        return '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
-                        <i class="fa fa-lg fa-fw fa-trash"></i>
-                    </button>';
-    }
-
-    function btnView($id) {
-        return '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details" id="view_client" data-toggle="modal" data-target="#modalViewClient" data-id="'.$id.'">
-                    <i class="fa fa-lg fa-fw fa-eye"></i>
-                </button>';
-    }
-
-    // $config = [
-    //     'data' => [
-    //         [22, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
-    //         [19, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
-    //         [3, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnEdit.$btnDelete.$btnDetails.'</nobr>'],
-    //     ],
-    //     'order' => [[1, 'asc']],
-    //     'columns' => [null, null, null, ['orderable' => false]],
-    // ];
-
-    $config = [];
+    $config = ['data'=>[]];
     foreach ($clients as $key => $client) {
         $config['data'][$key][] = $client->id;
         $config['data'][$key][] = $client->name;
         $config['data'][$key][] = $client->company;
         $config['data'][$key][] = $client->email;
         $config['data'][$key][] = $client->phone;
-        $config['data'][$key][] = '<nobr>'.btnEdit($client->id).btnDelete($client->id).btnView($client->id).'</nobr>';
+        $config['data'][$key][] = '<nobr>'.btnEdit($client->id).'</nobr>';
     }
     $config['order'] = [[1, 'asc']];
     $config['columns'] = [null, null, null, null, null, ['orderable' => false]];
-
-    // dd($config);
     @endphp
 
     {{-- Table --}}
     <x-adminlte-datatable id="table2" :heads="$heads" :config="$config" hoverable bordered compressed with-buttons/>
 
-    {{-- Add / Edit Form Modal --}}
+    {{-- Add / Form Modal --}}
     <form action="{{ route('clients.store') }}" method="post">
         @csrf
         <x-adminlte-modal id="modalClient" title="New Client" size="lg" theme="primary" icon="fas fa-plus" v-centered static-backdrop scrollable>
@@ -98,24 +105,35 @@
         </x-adminlte-modal>
     </form>
 
-    {{-- View Modal --}}
-    <x-adminlte-modal id="modalViewClient" title="View Client" size="lg" theme="primary" icon="fas fa-eye" v-centered static-backdrop scrollable>
-        <div>
-            <div class="row">
-                <x-adminlte-input type="text" name="name" label="Name" placeholder="Enter Name" fgroup-class="col-md-6" enable-old-support disabled/>
-                <x-adminlte-input type="text" name="company" label="Company" placeholder="Enter Company" fgroup-class="col-md-6" enable-old-support/>
-            </div>
-            <div class="row">
-                <x-adminlte-input type="text" name="phone" label="Phone" placeholder="Enter Phone" fgroup-class="col-md-6" enable-old-support/>
-                <x-adminlte-input type="email" name="email" label="Email" placeholder="Enter Email" fgroup-class="col-md-6" enable-old-support/>
-            </div>
-        </div>
-        <x-slot name="footerSlot">
-            <x-adminlte-button type="submit" label="Save" theme="success" class="mr-auto" icon="fas fa-lg fa-save"/>
-            <x-adminlte-button theme="danger" label="Dismiss" data-dismiss="modal"/>
-        </x-slot>
-    </x-adminlte-modal>
+    @foreach ($clients as $client)
+        {{-- Edit Modal --}}
+        <form action="{{ route('clients.update', ['id'=>$client->id]) }}" method="post">
+            @method('PUT')
+            @csrf
+            <x-adminlte-modal id="modalClient{{$client->id}}" title="Edit Client" size="lg" theme="primary" icon="fas fa-edit" v-centered static-backdrop scrollable>
+                <div>
+                    <div class="row">
+                        <x-adminlte-input type="text" name="name" value="{{$client->name}}" label="Name" placeholder="Enter Name" fgroup-class="col-md-6" error-key="false"/>
+                        <x-adminlte-input type="text" name="company" value="{{$client->company}}" label="Company" placeholder="Enter Company" fgroup-class="col-md-6" error-key="false"/>
+                    </div>
+                    <div class="row">
+                        <x-adminlte-input type="text" name="phone" value="{{$client->phone}}" label="Phone" placeholder="Enter Phone" fgroup-class="col-md-6" error-key="false"/>
+                        <x-adminlte-input type="email" name="email" value="{{$client->email}}" label="Email" placeholder="Enter Email" fgroup-class="col-md-6" error-key="false"/>
+                    </div>
+                </div>
+                <x-slot name="footerSlot" class="d-flex justify-content-between">
+                    <x-adminlte-button type="submit" label="Save" theme="success" class="mr-auto btn-save" icon="fas fa-lg fa-save"/>
+                    <x-adminlte-button theme="danger" label="Dismiss" class="btn-dismiss" data-dismiss="modal"/>
 
+        </form>
+                    <form action="{{ route('clients.delete', ['id'=>$client->id]) }}" method="post" class="btn-delete d-flex justify-content-end">
+                        @method('DELETE')
+                        @csrf
+                        <button onclick="return confirm('Watch out!!! Are you sure you want to delete this client permanently?');" class="btn btn-xs btn-default text-danger mx-1 p-2 shadow" title="Delete"><i class="fa fa-lg fa-fw fa-trash" style="font-size:24px;"></i></button>
+                    </form>
+                </x-slot>
+            </x-adminlte-modal>
+    @endforeach
 
 @stop
 
@@ -130,27 +148,17 @@
             ul.pagination {
                 justify-content: right;
             }
+            .btn-delete {
+                flex: 2;
+            }
+            td:last-child {
+                text-align: center;
+            }
         </style>
 @endsection
 
 @section('js')
         <script>
-            setTimeout(() => {
 
-                let edit_client = document.querySelectorAll('#edit_client')
-                edit_client.forEach(element => {
-                    element.addEventListener('click', (e)=>{
-                        console.log(e.currentTarget.getAttribute('data-id'))
-                    })
-                });
-
-                let view_client = document.querySelectorAll('#view_client')
-                view_client.forEach(element => {
-                    element.addEventListener('click', (e)=>{
-                        console.log(e.currentTarget.getAttribute('data-id'))
-                    })
-                });
-
-            }, 10);
         </script>
 @endsection
