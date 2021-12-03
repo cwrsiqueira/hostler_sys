@@ -55,6 +55,7 @@
     @php
     $heads = [
         'ID',
+        'Captação',
         'Name',
         'Company',
         'Email',
@@ -71,14 +72,15 @@
     $config = ['data'=>[]];
     foreach ($clients as $key => $client) {
         $config['data'][$key][] = $client->id;
+        $config['data'][$key][] = $client->captation;
         $config['data'][$key][] = $client->name;
         $config['data'][$key][] = $client->company;
         $config['data'][$key][] = $client->email;
         $config['data'][$key][] = $client->phone;
         $config['data'][$key][] = '<nobr>'.btnEdit($client->id).'</nobr>';
     }
-    $config['order'] = [[1, 'asc']];
-    $config['columns'] = [null, null, null, null, null, ['orderable' => false]];
+    $config['order'] = [[2, 'asc']];
+    $config['columns'] = [null, null, null, null, null, null, ['orderable' => false]];
     @endphp
 
     {{-- Table --}}
@@ -90,7 +92,10 @@
         <x-adminlte-modal id="modalClient" title="New Client" size="lg" theme="primary" icon="fas fa-plus" v-centered static-backdrop scrollable>
             <div>
                 <div class="row">
-                    <x-adminlte-input type="text" name="name" label="Name" placeholder="Enter Name" fgroup-class="col-md-6" enable-old-support autofocus/>
+                    <x-adminlte-input type="text" name="name" label="Name" placeholder="Enter Name" fgroup-class="col-md-12" enable-old-support autofocus/>
+                </div>
+                <div class="row">
+                    <x-adminlte-input type="text" name="captation" label="Captation" placeholder="Enter Captation" fgroup-class="col-md-6" enable-old-support/>
                     <x-adminlte-input type="text" name="company" label="Company" placeholder="Enter Company" fgroup-class="col-md-6" enable-old-support/>
                 </div>
                 <div class="row">
@@ -113,7 +118,10 @@
             <x-adminlte-modal id="modalClient{{$client->id}}" title="Edit Client" size="lg" theme="primary" icon="fas fa-edit" v-centered static-backdrop scrollable>
                 <div>
                     <div class="row">
-                        <x-adminlte-input type="text" name="name" value="{{$client->name}}" label="Name" placeholder="Enter Name" fgroup-class="col-md-6" error-key="false"/>
+                        <x-adminlte-input type="text" name="name" value="{{$client->name}}" label="Name" placeholder="Enter Name" fgroup-class="col-md-12" error-key="false"/>
+                    </div>
+                    <div class="row">
+                        <x-adminlte-input type="text" name="captation" value="{{$client->captation}}" label="Captation" placeholder="Enter Captation" fgroup-class="col-md-6" error-key="false"/>
                         <x-adminlte-input type="text" name="company" value="{{$client->company}}" label="Company" placeholder="Enter Company" fgroup-class="col-md-6" error-key="false"/>
                     </div>
                     <div class="row">

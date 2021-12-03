@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpgradeClientsTable extends Migration
+class CreatePermissionLinksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class UpgradeClientsTable extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->string('phone')->nullable()->change();;
+        Schema::create('permission_links', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('permission_group_id')->constrained();
+            $table->foreignId('permission_item_id')->constrained();
+            $table->timestamps();
         });
     }
 
@@ -25,6 +28,6 @@ class UpgradeClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('permission_links');
     }
 }

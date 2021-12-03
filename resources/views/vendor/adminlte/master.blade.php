@@ -72,6 +72,14 @@
     @endif
 
     <link rel="stylesheet" href="css/app.css">
+    <style>
+        body.login-page {
+            background: white;
+        }
+        .card.card-outline.card-primary {
+            background: #eee;
+        }
+    </style>
 
 </head>
 

@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Project;
+use App\Models\Project_resp;
+
 class ProjectController extends Controller
 {
     public function index() {
-        $projects = Client::select('id', 'name', 'email', 'phone', 'company')->get();
-        return view('clients', ['clients' => $projects]);
+        $projects = Project::all();
+
+        foreach ($projects as $key => $value) {
+            $value['resps'] = Project_resp::where('id', $value->id)->get();
+        }
+
+        dd($projects);
+        return view('projects', ['projects' => $projects]);
     }
 
     public function store(Request $request) {
@@ -17,14 +26,11 @@ class ProjectController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'company' => 'required|max:255',
-            'phone' => 'max:255',
-            'email' => 'required|max:255|unique:clients',
         ]);
 
-        Client::insert($data);
+        Project::insert($data);
 
-        return Redirect()->route('clients')->with('success', 'Client saved successfully!');
+        return Redirect()->route('projects')->with('success', 'Project saved successfully!');
     }
 
     public function update(Request $request, $id) {
@@ -32,18 +38,15 @@ class ProjectController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'company' => 'required|max:255',
-            'phone' => 'max:255',
-            'email' => ['required', 'max:255', Rule::unique('clients')->ignore($id)],
         ]);
 
-        Client::where('id', $id)->update($data);
+        Project::where('id', $id)->update($data);
 
-        return Redirect()->route('clients')->with('success', 'Client updated successfully!');
+        return Redirect()->route('projects')->with('success', 'Project updated successfully!');
     }
 
     public function delete($id) {
-        Client::where('id', $id)->delete();
-        return Redirect()->route('clients')->with('success', 'Client deleted successfully!');
+        Project::where('id', $id)->delete();
+        return Redirect()->route('projects')->with('success', 'Project deleted successfully!');
     }
 }
